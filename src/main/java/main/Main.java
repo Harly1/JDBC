@@ -48,6 +48,7 @@ public class Main {
         Logger.getGlobal().info("Server started");
         server.join();
 
+
   /*      try {
             long userId = dbService.addUser("tully");
             System.out.println("Added user id: " + userId);
