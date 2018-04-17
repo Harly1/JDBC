@@ -2,6 +2,8 @@ package servlets;
 
 import accounts.AccountService;
 import accounts.UserProfile;
+import dbService.DBException;
+import dbService.DBService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,11 +12,11 @@ import java.io.IOException;
 
 public class SignUpServlet extends HttpServlet {
 
-    private final AccountService accountService;
+    private final DBService dbService;
 
-    public SignUpServlet(AccountService accountService) {
+    public SignUpServlet(DBService dbService) {
 
-        this.accountService = accountService;
+        this.dbService = dbService;
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -28,7 +30,11 @@ public class SignUpServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);*/
 
         } else {
-            accountService.addNewUser(new UserProfile(login,password,eMail));
+            try {
+                dbService.addUser(login,password);
+            } catch (DBException e) {
+                e.printStackTrace();
+            }
 /*            response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Ok");
             response.setStatus(HttpServletResponse.SC_OK);*/

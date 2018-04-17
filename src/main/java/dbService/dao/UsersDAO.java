@@ -35,8 +35,11 @@ public class UsersDAO {
         });
     }
 
-    public void insertUser(String name) throws SQLException {
-        executor.execUpdate("insert into users (user_name) values ('" + name + "')");
+    public void insertUserLogin(String login) throws SQLException {
+        executor.execUpdate("insert into users (user_name) values ('" + login + "')");
+    }
+    public void insertUserPassword(String password) throws SQLException {
+        executor.execUpdate("insert into users (user_password) values ('" + password + "')");
     }
 
     public void createTable() throws SQLException {

@@ -1,7 +1,6 @@
 package servlets;
 
-import accounts.AccountService;
-
+import dbService.DBService;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,11 +8,11 @@ import java.io.IOException;
 
 public class SignInServlet extends HttpServlet {
 
-    private final AccountService accountService;
+    private final DBService dbService;
 
-    public SignInServlet(AccountService accountService) {
+    public SignInServlet(DBService dbService) {
 
-        this.accountService = accountService;
+        this.dbService = dbService;
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -21,7 +20,7 @@ public class SignInServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
-            String loginFromBD = accountService.getUserByLogin(login).getLogin();
+//            String loginFromBD = accountService.getUserByLogin(login).getLogin();
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(200);
             response.getWriter().println("Authorized: " + login);
