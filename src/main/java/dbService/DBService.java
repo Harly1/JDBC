@@ -34,6 +34,7 @@ public class DBService {
         try {
             connection.setAutoCommit(false);
             UsersDAO dao = new UsersDAO(connection);
+            dao.dropTable();
             dao.createTable();
             dao.insertUserLogin(name);
             dao.insertUserPassword(password);
