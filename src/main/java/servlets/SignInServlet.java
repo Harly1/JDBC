@@ -1,6 +1,9 @@
 package servlets;
 
+import dbService.DBException;
 import dbService.DBService;
+import dbService.dataSets.UsersDataSet;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +24,14 @@ public class SignInServlet extends HttpServlet {
 
         try {
 //            String loginFromBD = accountService.getUserByLogin(login).getLogin();
+            String loginFromBD = dbService.getUser(login);
+            String PasswordFromBD = dbService.getUserPassword(password);
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(200);
             response.getWriter().println("Authorized: " + login);
 //            response.setStatus(HttpServletResponse.SC_OK);
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | DBException e) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(401);
             response.getWriter().println("Unauthorized");

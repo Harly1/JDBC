@@ -19,7 +19,7 @@ public class DBService {
     private final Connection connection;
 
     public DBService() {
-        this.connection = getH2Connection();
+        this.connection = getMySqlConnection();
     }
 
     public UsersDataSet getUser(long id) throws DBException {
@@ -29,17 +29,33 @@ public class DBService {
             throw new DBException(e);
         }
     }
+    public String getUser(String login) throws DBException {
+        try {
 
-    public long addUser(String name, String password) throws DBException {
+            return (new UsersDAO(connection).getUserLogin(login));
+        } catch (SQLException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public String getUserPassword(String password) throws DBException {
+        try {
+
+            return (new UsersDAO(connection).getUserPassword(password));
+        } catch (SQLException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public long addUser(String login, String password) throws DBException {
         try {
             connection.setAutoCommit(false);
             UsersDAO dao = new UsersDAO(connection);
-            dao.dropTable();
+//            dao.dropTable();
             dao.createTable();
-            dao.insertUserLogin(name);
-            dao.insertUserPassword(password);
+            dao.insertUserLoginPassword(login,password);
             connection.commit();
-            return dao.getUserId(name);
+            return dao.getUserId(login);
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -99,7 +115,7 @@ public class DBService {
         return null;
     }
 
-    public static Connection getH2Connection() {
+/*    public static Connection getH2Connection() {
         try {
             String url = "jdbc:h2:./h2db";
             String name = "tully";
@@ -111,6 +127,24 @@ public class DBService {
             ds.setPassword(pass);
 
             Connection connection = DriverManager.getConnection(url, name, pass);
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }*/
+    public static Connection getMySqlConnection() {
+        try {
+            String url = "jdbc:mysql://localhost:3306/test";
+            String login = "root";
+            String password = "krasnov";
+
+            JdbcDataSource jdbcDataSource = new JdbcDataSource();
+            jdbcDataSource.setURL(url);
+            jdbcDataSource.setUser(login);
+            jdbcDataSource.setPassword(password);
+
+            Connection connection = DriverManager.getConnection(url, login, password);
             return connection;
         } catch (SQLException e) {
             e.printStackTrace();
